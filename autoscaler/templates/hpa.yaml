@@ -1,0 +1,27 @@
+{{- range $i, $autoscale := .Values.rules }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "autoscaler-bunny-{{ $i }}"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ $autoscale.targetDeployment }}
+  minReplicas: {{ $autoscale.minReplicas }}
+  maxReplicas: {{ $autoscale.maxReplicas }}
+  metrics:
+    {{- if $autoscale.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ $autoscale.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if $autoscale.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ $autoscale.targetMemoryUtilizationPercentage }}
+    {{- end }}
+---
+{{- end }}

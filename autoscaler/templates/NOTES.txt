@@ -1,0 +1,4 @@
+This will deploy a HPA for one component that needs this flexibility (more to come).
+Please ensure that you are running a metrics server otherwise you will not be able to benefit: kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+Run kubectl get hpa and check that there are no errors (please note that it can take a minute for the cpu to be updated).
